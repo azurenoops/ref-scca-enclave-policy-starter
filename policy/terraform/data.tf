@@ -9,7 +9,7 @@ data "azurerm_subscription" "current" {}
 
 # Org Management Group
 data "azurerm_management_group" "root" {
-  name = "ampe"
+  name = "anoa"
 }
 
 data "azurerm_management_group" "platforms" {
