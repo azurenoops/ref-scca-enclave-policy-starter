@@ -7,6 +7,17 @@
 
 # Policy Configuration
 
+// Subscription IDs are sensitive and should be set on the terraform command-line. Shown here for ease of testing
+subscription_id_hub  = "<<Hub Subscription Id>>"
+subscription_id_app1 = "<<App1 Subscription Id>>"
+subscription_id_app2 = "<<App2 Subscription Id>>"
+
+hub_resource_group_name  = "anoa-eus-hub-core-test-rg"
+app1_resource_group_name = "anoa-app1-eus-prod-rg"
+app2_resource_group_name = "anoa-app2-eus-prod-rg"
+
+securityContactsEmail = "yourAdmin@yourorg.onmicrosoft.us"
+
 # The policy definition id for the policy definition to be assigned to the subscription.  This policy definition id can be obtained from the Azure Policy portal.
 
 root_management_group_id           = "anoa" # the root management group id for this subscription

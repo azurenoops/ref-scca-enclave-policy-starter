@@ -36,21 +36,21 @@ data "azurerm_role_definition" "vm_contributor" {
 
 # User Assigned Managed Identity
 data "azurerm_user_assigned_identity" "policy_rem" {
-  name                = "ampe-eus-policy-remediator-ai"
-  resource_group_name = "afmpe-network-artifacts-rg"
+  name                = "policy_remediator_mi"
+  resource_group_name = "anoa-eus-hub-core-test-rg"
 }
 
-data "azuread_group" "ampe_policy_remediation" {
-  display_name     = "ampe_policy_remediation"
+data "azuread_group" "anoa_policy_remediation" {
+  display_name     = "anoa_policy_remediation"
   security_enabled = true
 }
 
-data "azurerm_log_analytics_workspace" "ampe_laws" {
-  name                = "ampe-eus-ops-logging-core-prod-log"
-  resource_group_name = "ampe-eus-ops-logging-core-prod-rg"
+data "azurerm_log_analytics_workspace" "anoa_laws" {
+  name                = "anoa-eus-ops-logging-core-test-log"
+  resource_group_name = "anoa-eus-ops-logging-core-test-rg"
 }
 
 data "azurerm_storage_account" "logging_storage_account" {
-  name                = "ampeeus264794eccaafa2f0"
-  resource_group_name = "ampe-eus-ops-logging-core-prod-rg"
+  name                = "anoaeus64fa2d1ba78d5496st"
+  resource_group_name = "anoa-eus-ops-logging-core-test-rg"
 }

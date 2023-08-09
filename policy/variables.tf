@@ -12,7 +12,7 @@
 variable "root_management_group_id" {
   type        = string
   description = "If specified, will set a custom Name (ID) value for the \"root\" Management Group, and append this to the ID for all core Management Groups."
-  default     = "ampe"
+  default     = "anoa"
 
   validation {
     condition     = can(regex("^[a-zA-Z0-9-]{2,10}$", var.root_management_group_id))
@@ -23,7 +23,7 @@ variable "root_management_group_id" {
 variable "root_management_group_display_name" {
   type        = string
   description = "If specified, will set a custom Display Name value for the \"root\" Management Group."
-  default     = "ampe"
+  default     = "anoa"
 
   validation {
     condition     = can(regex("^[A-Za-z][A-Za-z0-9- ._]{1,22}[A-Za-z0-9]?$", var.root_management_group_display_name))
@@ -42,24 +42,57 @@ variable "subscription_id_hub" {
   sensitive = true
 }
 
-variable "subscription_id_gsa_dev" {
+variable "hub_resource_group_name" {
   type        = string
-  description = "If specified, identifies the Workload subscription for \"GSA\" for resource deployment."
+  description = "Concatenated with the \"subscription_id_hub\" to identify the \"Hub\" Resource Group used for Policy Exemptions."
+  default     = "anoa-eus-hub-core-test-rg"
+}
+
+variable "subscription_id_app1" {
+  type        = string
+  description = "If specified, identifies the Workload subscription containing your first application for resource deployment."
+  default     = ""
 
   validation {
-    condition     = can(regex("^[a-z0-9-]{36}$", var.subscription_id_gsa_dev)) || var.subscription_id_gsa_dev == ""
+    condition     = can(regex("^[a-z0-9-]{36}$", var.subscription_id_app1)) || var.subscription_id_app1 == ""
     error_message = "Value must be a valid Subscription ID (GUID)."
   }
   sensitive = true
 }
 
-variable "subscription_id_gsa_prod" {
+variable "app1_resource_group_name" {
   type        = string
-  description = "If specified, identifies the Workload subscription for \"GSA\" for resource deployment."
+  description = "Concatenated with the \"subscription_id_app1\" to identify the \"App1\" Resource Group used for Policy Exemptions."
+  default     = "anoa-app1-eus-prod-rg"
+}
+
+
+
+variable "subscription_id_app2" {
+  type        = string
+  description = "If specified, identifies the Workload subscription containing your second application for resource deployment."
+  default     = ""
 
   validation {
-    condition     = can(regex("^[a-z0-9-]{36}$", var.subscription_id_gsa_prod)) || var.subscription_id_gsa_prod == ""
+    condition     = can(regex("^[a-z0-9-]{36}$", var.subscription_id_app2)) || var.subscription_id_app2 == ""
     error_message = "Value must be a valid Subscription ID (GUID)."
+  }
+  sensitive = true
+}
+
+variable "app2_resource_group_name" {
+  type        = string
+  description = "Concatenated with the \"subscription_id_app1\" to identify the \"App2\" Resource Group used for Policy Exemptions."
+  default     = "anoa-app2-eus-prod-rg"
+}
+
+variable "securityContactsEmail" {
+  type        = string
+  description = "If specified, identifies the email address to send security alerts to."
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", var.securityContactsEmail)) || var.securityContactsEmail == ""
+    error_message = "Value must be a valid email address format."
   }
   sensitive = true
 }
