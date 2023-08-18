@@ -3,23 +3,7 @@
 This reference implementation shows how to create a [Mission Enclave](https://docs.microsoft.com/en-us/azure) with an web app workload using:
 
 - [Terraform](https://www.terraform.io/intro/index.html) as infrastructure as code (IaC) tool to build, change, and version the infrastructure on Azure in a safe, repeatable, and efficient way.
-- [Github Actions or Azure DevOps Pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/get-started/what-is-azure-pipelines?view=azure-devops) to automate the deployment and undeployment of the entire infrastructure on multiple environments on the Azure platform.
-
-In a Mission Enclave, the private network is not exposed via to the internet. Hence, to manage any managed services such as an web app, you will need to use a virtual machine that has access to the WebApp's Azure Virtual Network (VNet). This reference implementation deploys a jumpbox virtual machine in the hub virtual network peered with the virtual network that hosts the WebApp. There are several options for establishing network connectivity to the WebApp.
-
-- Create a virtual machine in the same Azure Virtual Network (VNet) as the WebApp.
-- Use a virtual machine in a separate network and set up Virtual network peering. See the section below for more information on this option.
-- Use an Express Route or VPN connection.
-
-Creating a virtual machine in the same virtual network as the WebApp or in a peered virtual network is the easiest option. Express Route and VPNs add costs and require additional networking complexity. Virtual network peering requires you to plan your network CIDR ranges to ensure there are no overlapping ranges. For more information on Azure Private Links, see [What is Azure Private Link?](https://docs.microsoft.com/en-us/azure/private-link/private-link-overview)
-
-In addition, the reference implementation creates a private endpoint to access all the managed services deployed by the Terraform modules via a private IP address:
-
-- Azure Storage Account
-- Azure Key Vault
-
-> **NOTE**  
-> If you want to deploy a web app in a private network, you can use the [Azure Private Link](https://docs.microsoft.com/en-us/azure/private-link/private-link-overview) service to access the web app. For more information, see [Tutorial: Create and configure an Azure Private Link service using the Azure portal](https://docs.microsoft.com/en-us/azure/private-link/create-private-link-service-portal).
+- [Github Actions](https://docs.microsoft.com/en-us/azure/devops/pipelines/get-started/what-is-azure-pipelines?view=azure-devops) to automate the deployment and undeployment of the entire infrastructure on multiple environments on the Azure platform.
 
 ## Architecture ##
 

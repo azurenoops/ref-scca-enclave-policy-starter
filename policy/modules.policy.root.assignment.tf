@@ -67,7 +67,7 @@ module "org_mg_platform_diagnostics_initiative" {
   ]
 
   assignment_parameters = {
-    workspaceId                                        = data.azurerm_log_analytics_workspace.ampe_laws.id
+    workspaceId                                        = data.azurerm_log_analytics_workspace.anoa_laws.id
     storageAccountId                                   = data.azurerm_storage_account.logging_storage_account.id
     eventHubName                                       = ""
     eventHubAuthorizationRuleId                        = ""
@@ -83,9 +83,7 @@ module "org_mg_platform_diagnostics_initiative" {
     effect_DeploySubscriptionDiagnosticSetting         = "DeployIfNotExists"
     effect_DeployVnetDiagnosticSetting                 = "AuditIfNotExists"
     effect_DeployApiMgmtDiagnosticSetting              = "DeployIfNotExists"
-    effect_DeployAppServiceDiagnosticSetting           = "DeployIfNotExists"
     effect_DeployBastionDiagnosticSetting              = "DeployIfNotExists"
-    effect_DeployAppServiceDiagnosticSetting           = "DeployIfNotExists"
   }
 }
 
@@ -109,9 +107,9 @@ module "org_mg_configure_asc_initiative" {
   role_assignment_scope  = data.azurerm_management_group.root.id # using explicit scopes
 
   assignment_parameters = {
-    workspaceId           = data.azurerm_log_analytics_workspace.ampe_laws.id
+    workspaceId           = data.azurerm_log_analytics_workspace.anoa_laws.id
     eventHubDetails       = ""
-    securityContactsEmail = "afmpe_admin@missionpartners.us"
+    securityContactsEmail = var.securityContactsEmail
     securityContactsPhone = ""
   }
 
@@ -158,17 +156,14 @@ module "mod_mg_storage_enforce_minimum_tls1_2" {
 resource "time_sleep" "after_azurerm_policy_assignment" {
   depends_on = [
     time_sleep.after_azurerm_policy_definition,
-    //time_sleep.after_azurerm_policy_set_definition,
     module.mod_mg_deny_public_ip_platforms,
     module.mod_mg_deny_public_ip_workloads_internal,
     module.mod_mg_deny_public_ip_workloads_partners,
-    //module.mod_mg_platform_diagnostics_initiative,
     module.mod_mg_storage_enforce_https,
     module.mod_mg_storage_enforce_minimum_tls1_2
   ]
 
   triggers = {
-    //"azurerm_management_group_policy_assignment_noops" = jsonencode(keys(module.mod_mg_platform_diagnostics_initiative)),
     "azurerm_management_group_policy_assignment_noops" = jsonencode(keys(module.mod_mg_deny_public_ip_platforms)),
     "azurerm_management_group_policy_assignment_noops" = jsonencode(keys(module.mod_mg_deny_public_ip_workloads_internal)),
     "azurerm_management_group_policy_assignment_noops" = jsonencode(keys(module.mod_mg_deny_public_ip_workloads_partners)),

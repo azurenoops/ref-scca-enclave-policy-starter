@@ -1,12 +1,11 @@
 # Variable files
-terraform.tfvars
 
 ### https://raw.github.com/github/gitignore/abad92dac5a4306f72242dae3bca6e277bce3615/Terraform.gitignore
 
 # Compiled files
 *.tfstate
 *.tfstate.backup
-*.tfvars
+
 
 **/.terraform.lock.hcl
 
@@ -66,17 +65,6 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-
-# Include override files you do wish to add to version control using negated pattern
-#
-!examples/**/main.tf
-!examples/**/terraform.tfvars
-
-# Exclude tests files you do wish to add to version control using negated pattern
-#
-tests/**
-tests/**/terraform.tfvars
-test/go.sum
 
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 # example: *tfplan*

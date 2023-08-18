@@ -57,7 +57,13 @@ locals {
   provider_path = {
     management_groups = "/providers/Microsoft.Management/managementGroups/"
     role_assignment   = "/providers/Microsoft.Authorization/roleAssignments/"
+    rg_resourceId_prefix     = {
+      hub = "/subscriptions/${var.subscription_id_hub}/resourceGroups/"
+      app1 = "/subscriptions/${var.subscription_id_app1}/resourceGroups/"
+      app2 = "/subscriptions/${var.subscription_id_app2}/resourceGroups/"
+    }
   }
+
   resource_types = {
     policy_definition     = "Microsoft.Authorization/policyDefinitions"
     policy_set_definition = "Microsoft.Authorization/policySetDefinitions"
