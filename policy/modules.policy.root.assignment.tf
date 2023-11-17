@@ -5,11 +5,11 @@
 SUMMARY: Module to deploy Policy Assignments for Azure Policy in Partner Environments
 DESCRIPTION: The following components will be options in this deployment
              * Policy Assignments
-AUTHOR/S: jspinella
+AUTHOR/S: jrspinella
 */
 
 #######################################
-### Policy Assignment Configuations ###
+### Policy Assignment Configurations ###
 #######################################
 
 ###########################
