@@ -5,11 +5,11 @@
 SUMMARY: Module to deploy Policy Definitions for Azure Policy in Partner Environments
 DESCRIPTION: The following components will be options in this deployment
              * Policy Definitions
-AUTHOR/S: jspinella
+AUTHOR/S: jrspinella
 */
 
 ########################################
-### Policy Definitions Configuations ###
+### Policy Definitions Configurations ###
 ########################################
 
 ##################
