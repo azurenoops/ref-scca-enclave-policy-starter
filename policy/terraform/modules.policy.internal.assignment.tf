@@ -13,9 +13,9 @@ AUTHOR/S: jspinella
 ##################
 
 # Deny Public IP Addresses on Network 
-module "mod_mg_deny_public_ip_workloads_internal" {
+/* module "mod_mg_deny_public_ip_workloads_internal" {
   source            = "azurenoops/overlays-policy/azurerm//modules/policyDefAssignment/managementGroup"
-  version           = ">= 1.2.1"
+  version           = "~> 2.0"
   definition        = module.mod_deny_public_ip_workloads_internal.definition
   assignment_scope  = data.azurerm_management_group.internal.id
   assignment_effect = "Deny"
@@ -24,4 +24,4 @@ module "mod_mg_deny_public_ip_workloads_internal" {
   role_definition_ids = [
     data.azurerm_role_definition.contributor.id
   ]
-}
+} */

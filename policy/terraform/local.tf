@@ -58,9 +58,7 @@ locals {
     management_groups = "/providers/Microsoft.Management/managementGroups/"
     role_assignment   = "/providers/Microsoft.Authorization/roleAssignments/"
     rg_resourceId_prefix     = {
-      hub = "/subscriptions/${var.subscription_id_hub}/resourceGroups/"
-      app1 = "/subscriptions/${var.subscription_id_app1}/resourceGroups/"
-      app2 = "/subscriptions/${var.subscription_id_app2}/resourceGroups/"
+      hub = "/subscriptions/${var.subscription_id_hub}/resourceGroups/"     
     }
   }
 

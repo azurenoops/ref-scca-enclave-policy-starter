@@ -12,9 +12,9 @@ AUTHOR/S: jspinella
 # Network
 ##################
 
-module "mod_mg_deny_public_ip_workloads_partners" {
+/* module "mod_mg_deny_public_ip_workloads_partners" {
   source            = "azurenoops/overlays-policy/azurerm//modules/policyDefAssignment/managementGroup"
-  version           = ">= 1.2.1"
+  version           = "~> 2.0"
   definition        = module.mod_deny_public_ip_workloads_partners.definition
   assignment_scope  = data.azurerm_management_group.partners.id
   assignment_effect = "Deny"
@@ -23,5 +23,5 @@ module "mod_mg_deny_public_ip_workloads_partners" {
   role_definition_ids = [
     data.azurerm_role_definition.contributor.id
   ]
-}
+} */
 
