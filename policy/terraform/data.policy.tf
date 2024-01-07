@@ -25,12 +25,6 @@ data "azurerm_management_group" "partners" {
   name = "partners"
 }
 
-# User Defined Identity
-data "azurerm_user_assigned_identity" "policy_rem" {
-  name                = "anoa-usgva-policy-rem-id"
-  resource_group_name = "anoa-usgva-hub-core-dev-rg"
-}
-
 # Contributor role
 data "azurerm_role_definition" "contributor" {
   name = "Contributor"
@@ -42,12 +36,7 @@ data "azurerm_role_definition" "vm_contributor" {
 }
 
 data "azurerm_log_analytics_workspace" "anoa_laws" {
-  name                = "anoa-usgva-ops-mgt-logging-dev-log"
-  resource_group_name = "anoa-usgva-ops-mgt-logging-dev-rg"
-}
-
-data "azurerm_storage_account" "logging_storage_account" {
-  name                = "anoausgva9625b51a28devst"
-  resource_group_name = "anoa-usgva-hub-core-dev-rg"
+  name                = "anoa-eus-ops-mgt-logging-dev-log"
+  resource_group_name = "anoa-eus-ops-mgt-logging-dev-rg"
 }
 

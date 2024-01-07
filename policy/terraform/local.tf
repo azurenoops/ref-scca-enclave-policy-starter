@@ -57,8 +57,8 @@ locals {
   provider_path = {
     management_groups = "/providers/Microsoft.Management/managementGroups/"
     role_assignment   = "/providers/Microsoft.Authorization/roleAssignments/"
-    rg_resourceId_prefix     = {
-      hub = "/subscriptions/${var.subscription_id_hub}/resourceGroups/"     
+    rg_resourceId_prefix = {
+      hub = "/subscriptions/${var.subscription_id}/resourceGroups/"
     }
   }
 
@@ -94,4 +94,3 @@ locals {
   policy_non_compliance_message_enforced_replacement      = var.policy_non_compliance_message_enforced_replacement
   policy_non_compliance_message_not_enforced_replacement  = var.policy_non_compliance_message_not_enforced_replacement
 }
-
