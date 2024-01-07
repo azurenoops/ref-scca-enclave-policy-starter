@@ -13,6 +13,7 @@
 variable "environment" {
   description = "Name of the environment. This will be used to name the private endpoint resources deployed by this module. default is 'public'"
   type        = string
+  default     = "public"
 }
 
 variable "org_name" {
@@ -55,50 +56,13 @@ variable "disable_telemetry" {
   default     = false
 }
 
-variable "subscription_id_hub" {
+variable "subscription_id" {
   type        = string
-  description = "If specified, identifies the Platform subscription for \"Hub\" for resource deployment and correct placement in the Management Group hierarchy."
+  description = "If specified, identifies the subscription for exemption."
   sensitive   = true
+  default = null
   validation {
-    condition     = can(regex("^[a-z0-9-]{36}$", var.subscription_id_hub)) || var.subscription_id_hub == ""
+    condition     = can(regex("^[a-z0-9-]{36}$", var.subscription_id)) || var.subscription_id == ""
     error_message = "Value must be a valid Subscription ID (GUID)."
   }
-}
-
-variable "subscription_id_identity" {
-  type        = string
-  description = "If specified, identifies the Platform subscription for \"Identity\" for resource deployment and correct placement in the Management Group hierarchy."
-  default     = null
-  sensitive   = true
-}
-
-variable "subscription_id_operations" {
-  type        = string
-  description = "If specified, identifies the Platform subscription for \"Operations\" for resource deployment and correct placement in the Management Group hierarchy."
-  default     = null
-  sensitive   = true
-}
-
-variable "subscription_id_devsecops" {
-  type        = string
-  description = "If specified, identifies the Platform subscription for \"DevSecOps\" for resource deployment and correct placement in the Management Group hierarchy."
-  default     = null
-  sensitive   = true
-}
-
-variable "hub_resource_group_name" {
-  type        = string
-  description = "Concatenated with the \"subscription_id_hub\" to identify the \"Hub\" Resource Group used for Policy Exemptions."
-  default     = "anoa-eus-hub-core-test-rg"
-}
-
-variable "securityContactsEmail" {
-  type        = string
-  description = "If specified, identifies the email address to send security alerts to."
-
-  validation {
-    condition     = can(regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", var.securityContactsEmail)) || var.securityContactsEmail == ""
-    error_message = "Value must be a valid email address format."
-  }
-  sensitive = true
 }
