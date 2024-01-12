@@ -15,15 +15,13 @@ AUTHOR/S: jspinella
 ##################
 # General
 ##################
- 
+
 # Deploy General Policy Assignments
-module "root_mg_general_initiative_assignment" {
+module "mod_root_general_initiative_assignment" {
   source                 = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
   version                = "~> 2.0"
-  initiative             = module.mod_configure_general_initiative.initiative
-  assignment_name        = "Deploy General configuration"
+  initiative             = module.mod_deploy_general_config_root_initiative.initiative
   assignment_scope       = data.azurerm_management_group.root.id
-  assignment_description = "This policy set deploys the configurations for General settings, such as Allowed Virtual Machine Sizes, Allowed Regions, and Allowed Resource Types. See the list of policies of the services that are included."
   assignment_location    = var.default_location
 
   # resource remediation options
@@ -32,180 +30,349 @@ module "root_mg_general_initiative_assignment" {
   skip_role_assignment   = var.skip_role_assignment
   role_assignment_scope  = data.azurerm_management_group.root.id # using explicit scopes
 
-  identity_ids = [
-    data.azurerm_user_assigned_identity.policy_rem.id
+  # built-ins that deploy/modify require role_definition_ids be present
+  role_definition_ids = [
+    data.azurerm_role_definition.contributor.id
   ]
 
   assignment_parameters = {
-    profileName  = "setbypolicy"
+    listOfAllowedLocations = var.listOfAllowedLocations, # Global is used in services such as Azure DNS
+    listOfAllowedSKUs      = var.listOfAllowedSKUs,
   }
-}
 
-##################
-# Monitoring
-##################
-module "root_mg_monitioring_diagnostics_initiative_assignment" {
-  source                 = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
-  version                = "~> 2.0"
-  initiative             = module.mod_configure_diagnostic_monitoring_initiative.initiative
-  assignment_name        = "Deploy Diagnostic Settings to Azure Services"
-  assignment_scope       = data.azurerm_management_group.root.id
-  assignment_description = "This policy set deploys the configurations of application Azure resources to forward diagnostic logs and metrics to an Azure Log Analytics workspace. See the list of policies of the services that are included."
-  assignment_location    = var.default_location
-
-  # resource remediation options
-  re_evaluate_compliance = var.re_evaluate_compliance
-  skip_remediation       = var.skip_remediation
-  skip_role_assignment   = var.skip_role_assignment
-  role_assignment_scope  = data.azurerm_management_group.root.id # using explicit scopes
-
-  identity_ids = [
-    data.azurerm_user_assigned_identity.policy_rem.id
-  ]
-
-  assignment_parameters = {
-    logAnalytics = data.azurerm_log_analytics_workspace.anoa_laws.id
-    profileName  = "setbypolicy"
+  # 
+  assignment_metadata = {
+    version  = "1.0.0"
+    category = "General"
+    anoaCloudEnvironments = [
+      "AzureCloud",
+      "AzureUSGovernment",
+    ]
   }
-}
-
-# Deploy Enable Azure Monitor for VMs.
-module "mod_preview_deploy_azure_monitor_for_vm_initiative_assignment" {
-  source               = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
-  version              = "~> 2.0"
-  initiative           = data.azurerm_policy_set_definition.enable_azure_monitor_for_vm_with_azure_monitoring_agent_initiative
-  assignment_name      = "Enable Azure Monitor for VMs with Azure Monitoring Agent(AMA)"
-  assignment_scope     = data.azurerm_management_group.root.id
-  skip_remediation     = var.skip_remediation
-  skip_role_assignment = var.skip_role_assignment
-
-  # built-ins that deploy/modify require role_definition_ids be present
-  role_definition_ids = [
-    data.azurerm_role_definition.vm_contributor.id
-  ]
-}
-
-# Deploy Enable Azure Monitor for VMSS.
-module "mod_preview_deploy_azure_monitor_for_vm_initiative_assignment" {
-  source               = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
-  version              = "~> 2.0"
-  initiative           = data.azurerm_policy_set_definition.enable_azure_monitor_for_vmss_with_azure_monitoring_agent_initiative
-  assignment_name      = "Enable Azure Monitor for VMSS with Azure Monitoring Agent(AMA)"
-  assignment_scope     = data.azurerm_management_group.root.id
-  skip_remediation     = var.skip_remediation
-  skip_role_assignment = var.skip_role_assignment
-
-  # built-ins that deploy/modify require role_definition_ids be present
-  role_definition_ids = [
-    data.azurerm_role_definition.vm_contributor.id
-  ]
 }
 
 ######################
 # Defender for Cloud
 ######################
-module "org_mg_configure_defender_initiative_assignment" {
+module "mod_root_configure_defender_initiative_assignment" {
   source                 = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
   version                = "~> 2.0"
-  initiative             = module.mod_configure_defender_initiative.initiative
+  initiative             = module.mod_deploy_defender_root_initiative.initiative
   assignment_scope       = data.azurerm_management_group.root.id
-  assignment_description = "Deploys and configures Defender settings and defines exports"
-  assignment_effect      = "DeployIfNotExists"
-  assignment_location    = var.default_location
+  
+  # resource remediation options
+  re_evaluate_compliance = var.re_evaluate_compliance
+  skip_remediation       = var.skip_remediation
+  skip_role_assignment   = var.skip_role_assignment
 
+  # built-ins that deploy/modify require role_definition_ids be present
+  role_definition_ids = [
+    data.azurerm_role_definition.contributor.id,
+    data.azurerm_role_definition.law_contributor.id,
+    data.azurerm_role_definition.security_admin_contributor.id
+  ]
+
+  assignment_parameters = {    
+    logAnalytics                    = data.azurerm_log_analytics_workspace.anoa_laws.id
+    logAnalyticsWorkspaceResourceId = data.azurerm_log_analytics_workspace.anoa_laws.id
+    emailSecurityContact            = var.securityContactsEmail
+    resourceGroupName               = "anoa-eus-alerting-dev-rg"
+    resourceGroupLocation           = "eastus"   
+  }
+
+  assignment_metadata = {
+    version  = "1.0.0"
+    category = "Security Center"
+    anoaCloudEnvironments = [
+      "AzureCloud",
+      "AzureUSGovernment",
+    ]
+  }
+}
+
+# Deploy Microsoft Defender for Endpoint agent on applicable images.
+module "mod_root_preview_deploy_microsoft_defender_for_endpoint_agent_initiative_assignment" {
+  source                 = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
+  version                = "~> 2.0"
+  initiative             = data.azurerm_policy_set_definition.deploy_microsoft_defender_for_endpoint_agent_initiative
+  assignment_scope       = data.azurerm_management_group.root.id
+
+  # resource remediation options
+  re_evaluate_compliance = var.re_evaluate_compliance
+  skip_remediation       = var.skip_remediation
+  skip_role_assignment   = var.skip_role_assignment
+
+  # built-ins that deploy/modify require role_definition_ids be present
+  role_definition_ids = [
+    data.azurerm_role_definition.contributor.id
+  ]
+
+  assignment_metadata = {
+    version  = "1.0.0"
+    category = "Security Center"
+    anoaCloudEnvironments = [
+      "AzureCloud",
+      "AzureUSGovernment",
+    ]
+  }
+}
+
+# Deploy Microsoft Defender for Databases.
+module "mod_root_preview_deploy_microsoft_defender_for_databases_initiative_assignment" {
+  source                 = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
+  version                = "~> 2.0"
+  initiative             = data.azurerm_policy_set_definition.deploy_microsoft_defender_for_databases_initiative
+  assignment_scope       = data.azurerm_management_group.root.id
+  
+  # resource remediation options
+  re_evaluate_compliance = var.re_evaluate_compliance
+  skip_remediation       = var.skip_remediation
+  skip_role_assignment   = var.skip_role_assignment
+
+  # built-ins that deploy/modify require role_definition_ids be present
+  role_definition_ids = [
+    data.azurerm_role_definition.contributor.id
+  ]
+
+  assignment_metadata = {
+    version  = "1.0.0"
+    category = "Security Center"
+    anoaCloudEnvironments = [
+      "AzureCloud",
+      "AzureUSGovernment",
+    ]
+  }
+}
+
+#######################
+# Guest Configuration
+#######################
+
+# Deploy Guest Configuration Policy Assignments
+/* module "mod_root_guest_configuration_initiative_assignment" {
+  source                 = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
+  version                = "~> 2.0"
+  initiative             = module.mod_enforce_azure_compute_sec_benchmark_root_initiative.initiative
+  assignment_scope       = data.azurerm_management_group.root.id
+  
   # resource remediation options
   re_evaluate_compliance = var.re_evaluate_compliance
   skip_remediation       = var.skip_remediation
   skip_role_assignment   = var.skip_role_assignment
   role_assignment_scope  = data.azurerm_management_group.root.id # using explicit scopes
 
+  role_definition_ids = [
+    data.azurerm_role_definition.contributor.id
+  ]
+
+  assignment_metadata = {
+    version  = "1.0.0"
+    category = "Guest Configuration"
+    anoaCloudEnvironments = [
+      "AzureCloud",
+      "AzureUSGovernment",
+    ]
+  }
+} */
+
+
+##################
+# Monitoring
+##################
+module "mod_root_monitioring_diagnostics_initiative_assignment" {
+  source                 = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
+  version                = "~> 2.0"
+  initiative             = module.mod_deploy_diagnostic_monitoring_root_initiative.initiative
+  assignment_scope       = data.azurerm_management_group.root.id
+  
+  # resource remediation options
+  re_evaluate_compliance = var.re_evaluate_compliance
+  skip_remediation       = var.skip_remediation
+  skip_role_assignment   = var.skip_role_assignment
+  role_assignment_scope  = data.azurerm_management_group.root.id # using explicit scopes
+
+  role_definition_ids = [
+    data.azurerm_role_definition.contributor.id,
+    data.azurerm_role_definition.monitoring_contributor.id,
+    data.azurerm_role_definition.law_contributor.id,
+    data.azurerm_role_definition.st_contributor.id
+  ]
+
+  # Assignment parameters are done within the policy definition by using the default values. 
+  # Overrided at this by using the following example effect command:
+  # effect_DeployDiagnosticsApplicationGateway   = "DeployIfNotExists"
   assignment_parameters = {
-    workspaceId           = data.azurerm_log_analytics_workspace.anoa_laws.id
-    //securityContactsEmail = var.securityContactsEmail
-    //securityContactsPhone = var.securityContactsPhone
+    profileName    = "setbypolicy",
+    logAnalytics   = data.azurerm_log_analytics_workspace.anoa_laws.id
+    rgname         = data.azurerm_log_analytics_workspace.anoa_laws.resource_group_name
+    storagePrefix = "anoa"
+    logsEnabled    = true,
+    metricsEnabled = true,
   }
 
-  identity_ids = [
-    data.azurerm_user_assigned_identity.policy_rem.id
-  ]
-
-  # optional non-compliance messages. Key/Value pairs map as policy_definition_reference_id = 'content'
-  non_compliance_messages = {
-    null                    = "The Default non-compliance message for all member definitions"
-    AutoEnrollSubscriptions = "The non-compliance message for the auto_enroll_subscriptions definition"
+  assignment_metadata = {
+    version  = "1.0.0"
+    category = "Monitoring"
+    anoaCloudEnvironments = [
+      "AzureCloud",
+      "AzureUSGovernment",
+    ]
   }
 }
 
-# Deploy Microsoft Defender for Endpoint agent on applicable images.
-module "mod_preview_deploy_microsoft_defender_for_endpoint_agent_initiative_assignment" {
-  source               = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
-  version              = "~> 2.0"
-  initiative           = data.azurerm_policy_set_definition.preview_deploy_microsoft_defender_for_endpoint_agent_initiative
-  assignment_name      = "preview_deploy_microsoft_defender_for_endpoint_agent"
-  assignment_scope     = data.azurerm_management_group.root.id
-  skip_remediation     = var.skip_remediation
-  skip_role_assignment = var.skip_role_assignment
+# Deploy Enable Azure Monitor for VMs.
+module "mod_root_preview_deploy_azure_monitor_for_vm_initiative_assignment" {
+  source           = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
+  version          = "~> 2.0"
+  initiative       = data.azurerm_policy_set_definition.deploy_enable_azure_monitor_for_virtual_machines_initiative
+  assignment_scope = data.azurerm_management_group.root.id
+
+  # resource remediation options
+  re_evaluate_compliance = var.re_evaluate_compliance
+  skip_remediation       = var.skip_remediation
+  skip_role_assignment   = var.skip_role_assignment
 
   # built-ins that deploy/modify require role_definition_ids be present
   role_definition_ids = [
     data.azurerm_role_definition.vm_contributor.id
   ]
+
+  # Assignment parameters are done within the policy definition by using the default values. 
+  assignment_parameters = {
+    logAnalytics_1 = data.azurerm_log_analytics_workspace.anoa_laws.id
+  }
+
+  assignment_metadata = {
+    version  = "1.0.0"
+    category = "Monitoring"
+    anoaCloudEnvironments = [
+      "AzureCloud",
+      "AzureUSGovernment",
+    ]
+  }
 }
 
-# Configure Advanced Threat Protection to be enabled on open-source relational databases.
-module "mod_deploy_configure_advanced_threat_protection_to_be_enabled_on_open_source_relational_databases_initiative_assignment" {
-  source               = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
-  version              = "~> 2.0"
-  initiative           = data.azurerm_policy_set_definition.deploy_configure_advanced_threat_protection_to_be_enabled_on_open_source_relational_databases_initiative
-  assignment_name      = "Configure Advanced Threat Protection to be enabled on open-source relational databases"
-  assignment_scope     = data.azurerm_management_group.root.id
-  skip_remediation     = var.skip_remediation
-  skip_role_assignment = var.skip_role_assignment
+# Deploy Enable Azure Monitor for VMSS.
+module "mod_root_preview_deploy_azure_monitor_for_vmss_initiative_assignment" {
+  source           = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
+  version          = "~> 2.0"
+  initiative       = data.azurerm_policy_set_definition.deploy_enable_azure_monitor_for_virtual_machines_scale_sets_initiative
+  assignment_scope = data.azurerm_management_group.root.id
+
+  # resource remediation options
+  re_evaluate_compliance = var.re_evaluate_compliance
+  skip_remediation       = var.skip_remediation
+  skip_role_assignment   = var.skip_role_assignment
 
   # built-ins that deploy/modify require role_definition_ids be present
   role_definition_ids = [
     data.azurerm_role_definition.vm_contributor.id
   ]
+
+  # Assignment parameters are done within the policy definition by using the default values. 
+  assignment_parameters = {
+    logAnalytics_1 = data.azurerm_log_analytics_workspace.anoa_laws.id
+  }
+
+  assignment_metadata = {
+    version  = "1.0.0"
+    category = "Monitoring"
+    anoaCloudEnvironments = [
+      "AzureCloud",
+      "AzureUSGovernment",
+    ]
+  }
 }
 
 ####################
 # Cost Management
 ####################
 
-######################
-# Azure Network
-######################
+# Deploy Microsoft Defender for Endpoint agent on applicable images.
+module "mod_root_configure_cost_management_initiative_assignment" {
+  source                 = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
+  version                = "~> 2.0"
+  initiative             = module.mod_deploy_cost_management_config_root_initiative.initiative
+  assignment_scope       = data.azurerm_management_group.root.id
 
-##################
-# Storage
-##################
-/* module "mod_mg_storage_enforce_https" {
-  source            = "azurenoops/overlays-policy/azurerm//modules/policyDefAssignment/managementGroup"
-  version           = "~> 2.0"
-  definition        = module.mod_storage_enforce_https.definition
-  assignment_scope  = data.azurerm_management_group.root.id
-  assignment_effect = "Deny"
+  # resource remediation options
+  re_evaluate_compliance = var.re_evaluate_compliance
+  skip_remediation       = var.skip_remediation
+  skip_role_assignment   = var.skip_role_assignment
+
+  # built-ins that deploy/modify require role_definition_ids be present
+  role_definition_ids = [
+    data.azurerm_role_definition.contributor.id
+  ]
+
+  assignment_metadata = {
+    version  = "1.0.0"
+    category = "Cost Management"
+    anoaCloudEnvironments = [
+      "AzureCloud",
+      "AzureUSGovernment",
+    ]
+  }
 }
-
-module "mod_mg_storage_enforce_minimum_tls1_2" {
-  source            = "azurenoops/overlays-policy/azurerm//modules/policyDefAssignment/managementGroup"
-  version           = "~> 2.0"
-  definition        = module.mod_storage_enforce_minimum_tls1_2.definition
-  assignment_scope  = data.azurerm_management_group.root.id
-  assignment_effect = "Deny"
-} */
 
 ##################
 # Azure AD
 ##################
 
-##################
-# Azure SQL
-##################
+module "mod_root_audit_aad_use_private_link_access_azure_services_def_assignment" {
+  source                 = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
+  version                = "~> 2.0"
+  initiative             = module.mod_deploy_aad_config_root_initiative.initiative
+  assignment_scope       = data.azurerm_management_group.root.id
+
+  # resource remediation options
+  re_evaluate_compliance = var.re_evaluate_compliance
+  skip_remediation       = var.skip_remediation
+  skip_role_assignment   = var.skip_role_assignment
+
+  # built-ins that deploy/modify require role_definition_ids be present
+  role_definition_ids = [
+    data.azurerm_role_definition.contributor.id
+  ]
+
+  assignment_metadata = {
+    version  = "1.0.0"
+    category = "Cost Management"
+    anoaCloudEnvironments = [
+      "AzureCloud",
+      "AzureUSGovernment",
+    ]
+  }
+}
 
 ##################
-# Azure Key Vault
+# SQL
 ##################
+
+# Deploy Configure Advanced Threat Protection to be enabled on Open Sources Databases.
+module "mod_root_preview_deploy_atp_for_open_source_dbs_initiative_assignment" {
+  source               = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
+  version              = "~> 2.0"
+  initiative           = data.azurerm_policy_set_definition.deploy_configure_advanced_threat_protection_to_be_enabled_on_open_source_dbs_initiative
+  assignment_scope     = data.azurerm_management_group.root.id
+  
+  skip_remediation     = var.skip_remediation
+  skip_role_assignment = var.skip_role_assignment
+
+  # built-ins that deploy/modify require role_definition_ids be present
+  role_definition_ids = [
+    data.azurerm_role_definition.contributor.id,
+  ]
+
+  assignment_metadata = {
+    version  = "1.0.0"
+    category = "Azure AD"
+    anoaCloudEnvironments = [
+      "AzureCloud",
+      "AzureUSGovernment",
+    ]
+  }
+}
 
 /* resource "time_sleep" "after_azurerm_policy_assignment" {
   depends_on = [

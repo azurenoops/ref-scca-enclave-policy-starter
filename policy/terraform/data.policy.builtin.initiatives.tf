@@ -25,6 +25,7 @@ data "azurerm_policy_set_definition" "enable_azure_monitor_for_vmss_with_azure_m
   name = "f5bf694c-cca7-4033-b883-3a23327d5485" #"Enable Azure Monitor for VMSS with Azure Monitoring Agent(AMA)"
 }
 
+
 ##################
 # Security Center
 ##################
@@ -57,10 +58,22 @@ data "azurerm_policy_set_definition" "deploy_enable_azure_monitor_for_virtual_ma
   name = "75714362-cae7-409e-9b99-a8e5075b7fad" #"Legacy - Enable Azure Monitor for Virtual Machine Scale Sets"
 }
 
+data "azurerm_policy_set_definition" "audit_public_network_access_initiative" {
+  name = "f1535064-3294-48fa-94e2-6e83095a5c08" #"Audit Public Network Access"
+}
+
 ##################
 # Networking
 ##################
 
 data "azurerm_policy_set_definition" "deploy_flow_logs_should_be_configured_and_enabled_for_every_network_security_group_initiative" {
   name = "62329546-775b-4a3d-a4cb-eb4bb990d2c0" #"Flow logs should be configured and enabled for every network security group"
+}
+
+##################
+# SQL
+##################
+
+data "azurerm_policy_set_definition" "audit_aad_admin_should_be_provisioned_for_SQL_servers_initiative" {
+  name = "62329546-775b-4a3d-a4cb-eb4bb990d2c0" #"An Azure Active Directory administrator should be provisioned for SQL servers"
 }

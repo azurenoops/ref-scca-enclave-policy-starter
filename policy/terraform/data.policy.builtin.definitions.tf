@@ -41,6 +41,27 @@ data "azurerm_policy_definition" "deploy_configure_private_link_for_AAD_to_use_p
   name = "7e4301f9-5f32-4738-ad9f-7ec2d15563ad" # "Configure Private Link for Azure AD to use private DNS zones"
 }
 
+data "azurerm_policy_definition" "audit_usage_of_custom_RBAC_roles" {
+  name = "a451c1ef-c6ca-483d-87ed-f49761e3ffb5" #"Audit usage of custom RBAC roles"
+}
+
+data "azurerm_policy_definition" "manual_restrict_access_to_privileged_accounts" {
+  name = "873895e8-0e3a-6492-42e9-22cd030e9fcd" #"Restrict access to privileged accounts"
+}
+
+data "azurerm_policy_definition" "manual_monitor_account_activity" {
+  name = "7b28ba4f-0a87-46ac-62e1-46b7c09202a8" #"Monitor account activity"
+}
+
+data "azurerm_policy_definition_built_in" "audit_privileged_functions" {
+  display_name = "Audit privileged functions" #"Audit privileged functions"
+}
+
+data "azurerm_policy_definition_built_in" "manual_disable_user_accounts_posing_a_significant_risk" {
+  display_name = "Disable user accounts posing a significant risk"
+}
+
+
 ##################
 # Network
 ##################
