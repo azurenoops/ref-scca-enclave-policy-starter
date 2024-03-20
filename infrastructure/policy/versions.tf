@@ -7,7 +7,7 @@ DESCRIPTION: The following components will be options in this deployment
             * Mission Enclave - Policy Definitions
             * Mission Enclave - Policy Assignments
             * Mission Enclave - Role Definitions
-AUTHOR/S: jspinella
+AUTHOR/S: jrspinella
 */
 
 terraform {
