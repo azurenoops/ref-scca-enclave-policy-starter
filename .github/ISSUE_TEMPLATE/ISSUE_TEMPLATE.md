@@ -10,7 +10,8 @@ IF SUFFICIENT INFORMATION IS NOT PROVIDED VIA THE FOLLOWING TEMPLATE THE ISSUE M
 > Please provide us with the following information
 > ---------------------------------------------------------------
 
-### This issue is for a: (mark with an `x`)
+This issue is for a: (mark with an `x`)
+-----------------------------------------------
 
 ```
 - [ ] bug report -> please search issues before submitting
@@ -19,22 +20,29 @@ IF SUFFICIENT INFORMATION IS NOT PROVIDED VIA THE FOLLOWING TEMPLATE THE ISSUE M
 - [ ] regression (a behavior that used to work and stopped in a new release)
 ```
 
-### Minimal steps to reproduce
+Minimal steps to reproduce
+--------------------------
 >
 
-### Any log messages given by the failure
+Any log messages given by the failure
+-------------------------------------
 >
 
-### Expected/desired behavior
+Expected/desired behavior
+-------------------------
 >
 
-### OS and Version?
+OS and Version?
+---------------
+>
 > Windows 7, 8 or 10. Linux (which distribution). macOS (Yosemite? El Capitan? Sierra?)
 
-### Versions
+Versions
+--------
 >
 
-### Mention any other details that might be useful
+Mention any other details that might be useful
+-----------------------------------------------
 
 > ---------------------------------------------------------------
 > Thanks! We'll be in touch soon.

@@ -18,4 +18,4 @@ jobs:
       - name: terraform validate
         uses: azurenoops/terraform-github-actions/terraform-validate@v1.34.2
         with:
-          path: infrastructure/terraform
+          path: infrastructure/policy

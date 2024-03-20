@@ -24,11 +24,11 @@ jobs:
         id: check
         uses: azurenoops/terraform-github-actions/terraform-check@v1.34.2
         with:
-          path: infrastructure/terraform
+          path: infrastructure/policy
           variables: |
             subscription_id_hub               = "${{ env.ARM_SUBSCRIPTION_ID }}"                   
           var_file: |
-            infrastructure/terraform/tfvars/parameters.tfvars
+            infrastructure/policy/tfvars/parameters.tfvars
           backend_config: |
             storage_account_name=${{ secrets.AZURE_TF_STATE_STORAGE_ACCOUNT_NAME }}
             container_name=${{ secrets.AZURE_TF_STATE_STORAGE_CONTAINER_NAME }}            
