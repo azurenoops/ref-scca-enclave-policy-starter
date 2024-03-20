@@ -1,25 +1,59 @@
 # Azure NoOps Mission Enclave Policy starter #
 
-Azure NoOps Mission Enclave Policy starter is a highly opinionated Infrastructure-as-Code (IaC) which IT oversight organizations can use to create a cloud management system to deploy Azure environments for their workloads and teams.
+Azure NoOps Mission Enclave Policy starter is a highly opinionated Policy-as-Code (PaC) which IT oversight organizations can use to create a cloud management system to deploy Azure environments for their workloads and teams.
 
-Azure NoOps Mission Enclave Policy starter addresses a narrowly scoped, specific need for a Secure Cloud Computing Architecture (SCCA) compliant hub and spoke infrastructure.
+Azure NoOps Mission Enclave Policy starter addresses a narrowly scoped, specific need for a policy governance for Mission Enclaves.
 
 Goals of Azure NoOps Mission Enclave Policy starter:
 
 - Designed for US Government mission customers that have a small number of teams to operate cloud environments for their workloads
-- Implements SCCA controls following Microsoft's [SACA](https://aka.ms/saca) implementation guidance
+- Follows Zero Trust principles and implements a [Zero Trust architecture](https://aka.ms/zerotrust)
 - Deployable in Azure commercial, Azure Government, Azure Government Secret, and Azure Government Top Secret clouds
 - Written as [Terraform](./infrastructure/terraform/) templates
-- Ability to consume workloads addons such as TAK Server, web apps, Azure SQL Database, and Azure Kubernetes Service (AKS)
 - Use E2E [Github Actions](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions) as part of  pipelines to automate the deployment and removal of the entire infrastructure on multiple environments on the Azure platform.
+
+## Table of Contents ##
+
+- [Azure NoOps Mission Enclave Policy starter](#azure-noops-mission-enclave-policy-starter)
+  - [Table of Contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Architecture](#architecture)
+  - [Deploy Manually with Terraform](#deploy-manually-with-terraform)
+  - [Deploy with GitHub Actions](#deploy-with-github-actions)
+  - [Importance of Separation of Duties (Azure NoOps Shared Responsibility Model)](#importance-of-separation-of-duties-azure-noops-shared-responsibility-model)
+  - [Limitations](#limitations)
+  - [Got feedback](#got-feedback)
+  - [Data Collection](#data-collection)
+  - [Contributing](#contributing)
+  - [Legal Notices](#legal-notices)
+  - [Trademarks](#trademarks)
+
+## Getting Started ##
+
+### Prerequisites ###
+
+Before you begin, ensure you have met the following requirements:
+
+- **Azure Subscription**: You need an Azure subscription to create resources in Azure. If you don't have one, you can create a [free account](https://azure.microsoft.com/free/).
+
+- **Azure CLI or Azure PowerShell**: You need either Azure CLI or Azure PowerShell installed and configured to interact with your Azure account. You can download them from [here](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) and [here](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps) respectively.
+
+- **Terraform**: You will need Terraform installed to deploy the infrastructure. You can download Terraform from [here](https://www.terraform.io/downloads.html).
+
+- **Knowledge of Azure Landing Zones**: This project involves deploying and managing Azure Landing Zones resources. Familiarity with Azure Landing Zones and its concepts is recommended.
+
+- **Knowledge of Azure Policy**: This project involves deploying and managing Azure Policy resources. Familiarity with Azure Policy and its concepts is recommended.
+
+Please replace the links and the software versions with the ones that are relevant to your project.
 
 ## Architecture ##
 
-As part of a default deployment configuration, policy and policy set definitions are deployed at multiple levels within the Azure NoOps Mission Enclave Policy starter Management Group hierarchy as depicted within the below above.
+As part of a default deployment configuration, policy and policy set definitions are deployed at multiple levels within the Azure NoOps Mission Enclave Management Group hierarchy as depicted within the below above.
 
-![Architecture](./docs/images/normalized-architecture.png)
+![Architecture](./docs/images/MgmtGroups_Policies_v0.2.jpg)
 
-[click here]() to see the sections below to learn more about the policy sets and policy set definitions applied at each level of the Management Group hierarchy.
+[click here](https://azurenoops.github.io/terraform-overlays-baseline/deployment/policy/policy-governance/) to see the sections below to learn more about the policy sets and policy set definitions applied at each level of the Management Group hierarchy.
 
 ## Deploy Manually with Terraform ##
 
@@ -32,7 +66,7 @@ The below scenario is how to get started on the Mission Enclave Policy implement
 Manual Deployment Details:
 | Deployment Methodology | Manual Deployment |
 |--------------|--------------|
-|Terraform|[Published](./docs/10-manual-deployment-guide-terraform.md)
+|Terraform|[Published](https://azurenoops.github.io/terraform-overlays-baseline/deployment/policy/policy-manual/)
 
 >NOTE: Using manual deployment to deploy the infrastructure using the Terraform CLI. This is a good option if you want to learn how to deploy the infrastructure using Terraform CLI.
 
@@ -47,7 +81,7 @@ The below scenario is how to get started on the Mission Enclave Policy implement
 E2E GitHub Deployment Details:
 | Deployment Methodology | GitHub Actions | Azure DevOps |
 |--------------|--------------|--------------|
-|Terraform|[In Progress](./docs/09-e2e-deployment-guide-githubaction.md)| Coming soon |
+|Terraform|[In Progress](.https://azurenoops.github.io/terraform-overlays-baseline/deployment/policy/policy-github/)| Coming soon |
 
 ## Importance of Separation of Duties (Azure NoOps Shared Responsibility Model) ##
 
