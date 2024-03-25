@@ -1,0 +1,36 @@
+name: Destroy Mission Enclave Managment plan [USE WITH CAUTION]
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  plan:    
+    runs-on: ubuntu-latest
+    name: Destroy terraform configuration plan for an Mission Enclave Management terraform configuration
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_ENVIRONMENT: ${{ secrets.ARM_ENVIRONMENT }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: terraform destroy
+        uses: azurenoops/terraform-github-actions/terraform-destroy@v1.34.2
+        with:
+          path: infrastructure/policy
+          variables: |
+            subscription_id_hub               = "${{ env.ARM_SUBSCRIPTION_ID }}"            
+          var_file: |
+            infrastructure/policy/tfvars/parameters.tfvars
+          backend_config: |
+            storage_account_name=${{ secrets.AZURE_TF_STATE_STORAGE_ACCOUNT_NAME }}
+            container_name=${{ secrets.AZURE_TF_STATE_STORAGE_CONTAINER_NAME }}            
+            resource_group_name=${{ secrets.AZURE_TF_STATE_RESOURCE_GROUP_NAME }}
