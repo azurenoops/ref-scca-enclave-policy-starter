@@ -117,7 +117,7 @@ listOfAllowedSKUs = [
   "Standard_NV12s_v3",
   "Standard_NV24s_v3",
   "Standard_NV48s_v3"
-]
+] # 
 
 #################################
 # Logging Policy Configuration ##

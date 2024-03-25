@@ -103,6 +103,8 @@ It is important to understand how you would set this up for a production environ
 
 The Mission Enclave Landing Zone is a reference implementation of a Zero Trust/SCCA compliant hub and spoke infrastructure. The Mission Enclave Landing Zone is a highly opinionated Infrastructure-as-Code (IaC) which IT oversight organizations can use to create a cloud management system to deploy Azure environments for their workloads and teams.
 
+You can use the Mission Enclave Policy starter with the Mission Enclave Landing Zone to deploy a Zero Trust/SCCA compliant hub and spoke infrastructure.
+
 ## Limitations ##
 
 - Azure NoOps Mission Enclave Policy starter is a reference implementation and is not intended to be used as-is for production workloads. You should carefully consider the suitability of this reference implementation against your organization's requirements.
