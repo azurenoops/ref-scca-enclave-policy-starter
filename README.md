@@ -22,6 +22,7 @@ Goals of Azure NoOps Mission Enclave Policy starter:
   - [Deploy Manually with Terraform](#deploy-manually-with-terraform)
   - [Deploy with GitHub Actions](#deploy-with-github-actions)
   - [Importance of Separation of Duties (Azure NoOps Shared Responsibility Model)](#importance-of-separation-of-duties-azure-noops-shared-responsibility-model)
+  - [Mission Enclave Landing Zone](#mission-enclave-landing-zone)
   - [Limitations](#limitations)
   - [Got feedback](#got-feedback)
   - [Data Collection](#data-collection)
