@@ -12,8 +12,9 @@ AUTHOR/S: jspinella
 # Network
 ##################
 
+// ***** UNCOMMENT IF USING FORENSIC SUB *****
 # Deploy Network Policy Assignments
-module "mod_platforms_forensic_configure_network_configuration_initiative_assignment" {
+/* module "mod_platforms_forensic_configure_network_configuration_initiative_assignment" {
   source              = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
   version             = "~> 2.0"
   initiative          = module.mod_platforms_forensic_configure_network_configuration_initiative.initiative
@@ -89,3 +90,4 @@ module "mod_platforms_forensic_deploy_azure_monitor_baseline_forensic_initiative
     ]
   }
 }
+ */

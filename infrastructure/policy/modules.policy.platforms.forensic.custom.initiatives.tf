@@ -14,7 +14,8 @@ AUTHOR/S: jspinella
 # Monitoring
 ####################
 
-# Configures all the Azure Monitor settings, such as Activity Log, Diagnostic Settings, and Log Analytics workspace
+// ***** UNCOMMENT IF USING FORENSIC SUB *****
+/* # Configures all the Azure Monitor settings, such as Activity Log, Diagnostic Settings, and Log Analytics workspace
 module "mod_platforms_forensic_deploy_azure_monitor_baseline_initiative" {
   source                  = "azurenoops/overlays-policy/azurerm//modules/policyInitiative"
   version                 = "~> 2.0"
@@ -89,4 +90,4 @@ module "mod_platforms_forensic_configure_virtual_machine_configuration_initiativ
     data.azurerm_policy_definition.audit_virtual_machines_should_have_Azure_Monitor_Agent_installed,
     data.azurerm_policy_definition.audit_virtual_machines_and_virtual_machine_scale_sets_should_have_encryption_at_host_enabled,
   ]
-}
+} */
