@@ -17,12 +17,13 @@ AUTHOR/S: jspinella
 # Configures all the Azure Key Vault settings and gaurdrails, such as Azure Key Vault Auditing, Purge Protection, and Soft Delete
 module "mod_platforms_configure_azure_key_vault_initiative" {
   source                  = "azurenoops/overlays-policy/azurerm//modules/policyInitiative"
-  version                 = "~> 2.0" 
+  version                 = "~> 2.0"
+  count = var.settings.platforms_management_group_policies.enabled ? 1 : 0
   initiative_name         = "deploy_azure_key_vault_config"
   initiative_display_name = "Key Vault Governance"
   initiative_description  = "This policy set configures all the Azure Key Vault settings and guardrails, such as Azure Key Vault Auditing, Purge Protection, and Soft Delete"
   initiative_category     = "Key Vault"
-  management_group_id     = data.azurerm_management_group.platforms.id
+  management_group_id     = var.settings.platforms_management_group_policies.create ? azurerm_management_group.platforms[0].id : data.azurerm_management_group.platforms[0].id
   merge_effects           = false
 
   # Populate member_definitions with a for loop (explicit)
@@ -46,11 +47,12 @@ module "mod_platforms_configure_azure_key_vault_initiative" {
 module "mod_platforms_configure_storage_initiative" {
   source                  = "azurenoops/overlays-policy/azurerm//modules/policyInitiative"
   version                 = "~> 2.0"
+  count = var.settings.platforms_management_group_policies.enabled ? 1 : 0
   initiative_name         = "deploy_storage_account_config"
   initiative_display_name = "Storage Governance"
   initiative_description  = "This policy set configures all the Azure Storage settings and guardrails, such as Storage Accounts with encryption and HTTPS traffic only"
   initiative_category     = "Storage"
-  management_group_id     = data.azurerm_management_group.platforms.id
+  management_group_id     = var.settings.platforms_management_group_policies.create ? azurerm_management_group.platforms[0].id : data.azurerm_management_group.platforms[0].id
   merge_effects           = false
 
   # Populate member_definitions with a for loop (explicit)

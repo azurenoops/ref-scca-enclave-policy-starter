@@ -73,7 +73,7 @@ module "mod_root_configure_defender_initiative_assignment" {
   ]
 
   assignment_parameters = {
-    workspaceResourceId   = data.azurerm_log_analytics_workspace.anoa_laws.id
+    workspaceResourceId   = var.settings.workspace.create ? azurerm_log_analytics_workspace.anoa_laws[0].id : data.azurerm_log_analytics_workspace.anoa_laws[0].id
     emailSecurityContact  = var.securityContactsEmail
     resourceGroupName     = "${var.org_name}-${var.default_location}-exports-${var.deploy_environment}-rg"
     resourceGroupLocation = var.default_location
@@ -260,9 +260,9 @@ module "mod_root_monitioring_diagnostics_initiative_assignment" {
   # effect_DeployDiagnosticsApplicationGateway   = "DeployIfNotExists"
   assignment_parameters = {
     profileName      = "setbypolicy",
-    logAnalytics     = data.azurerm_log_analytics_workspace.anoa_laws.id,
-    storageAccountId = data.azurerm_storage_account.anoa_laws_storage.id,
-    workspaceId      = data.azurerm_log_analytics_workspace.anoa_laws.id,
+    logAnalytics     = var.settings.workspace.create ? azurerm_log_analytics_workspace.anoa_laws[0].id : data.azurerm_log_analytics_workspace.anoa_laws[0].id,
+    storageAccountId = var.settings.workspace.create ? azurerm_storage_account.anoa_laws_storage[0].id : data.azurerm_storage_account.anoa_laws_storage[0].id,
+    workspaceId      = var.settings.workspace.create ? azurerm_log_analytics_workspace.anoa_laws[0].id : data.azurerm_log_analytics_workspace.anoa_laws[0].id,
   }
 
   assignment_metadata = {
@@ -294,7 +294,7 @@ module "mod_root_preview_deploy_azure_monitor_for_vm_initiative_assignment" {
 
   # Assignment parameters are done within the policy definition by using the default values. 
   assignment_parameters = {
-    logAnalytics_1 = data.azurerm_log_analytics_workspace.anoa_laws.id
+    logAnalytics_1 = var.settings.workspace.create ? azurerm_log_analytics_workspace.anoa_laws[0].id : data.azurerm_log_analytics_workspace.anoa_laws[0].id
   }
 
   assignment_metadata = {
@@ -326,7 +326,7 @@ module "mod_root_preview_deploy_azure_monitor_for_vmss_initiative_assignment" {
 
   # Assignment parameters are done within the policy definition by using the default values. 
   assignment_parameters = {
-    logAnalytics_1 = data.azurerm_log_analytics_workspace.anoa_laws.id
+    logAnalytics_1 = var.settings.workspace.create ? azurerm_log_analytics_workspace.anoa_laws[0].id : data.azurerm_log_analytics_workspace.anoa_laws[0].id
   }
 
   assignment_metadata = {

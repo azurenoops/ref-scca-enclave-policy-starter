@@ -16,8 +16,9 @@ AUTHOR/S: jspinella
 module "mod_platforms_configure_azure_key_vault_initiative_assignment" {
   source              = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
   version             = "~> 2.0"
-  initiative          = module.mod_platforms_configure_azure_key_vault_initiative.initiative
-  assignment_scope    = data.azurerm_management_group.platforms.id
+  count = var.settings.platforms_management_group_policies.enabled ? 1 : 0
+  initiative          = module.mod_platforms_configure_azure_key_vault_initiative[0].initiative
+  assignment_scope    = var.settings.platforms_management_group_policies.create ? azurerm_management_group.platforms[0].id : data.azurerm_management_group.platforms[0].id
   assignment_location = var.default_location
 
   # resource remediation options
@@ -56,8 +57,9 @@ module "mod_platforms_configure_azure_key_vault_initiative_assignment" {
 module "mod_platforms_configure_azure_storage_account_initiative_assignment" {
   source              = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
   version             = "~> 2.0"
-  initiative          = module.mod_platforms_configure_storage_initiative.initiative
-  assignment_scope    = data.azurerm_management_group.platforms.id
+  count = var.settings.platforms_management_group_policies.enabled ? 1 : 0
+  initiative          = module.mod_platforms_configure_storage_initiative[0].initiative
+  assignment_scope    = var.settings.platforms_management_group_policies.create ? azurerm_management_group.platforms[0].id : data.azurerm_management_group.platforms[0].id
   assignment_location = var.default_location
 
   # resource remediation options

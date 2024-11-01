@@ -22,7 +22,8 @@ module "mod_platforms_security_deploy_azure_monitor_baseline_initiative" {
   initiative_display_name = "Azure Monitor Baseline Alerts for Service Health for Security"
   initiative_description  = "This policy set configures all the Azure Monitor Baseline Alerts for Service Health."
   initiative_category     = "Monitoring"
-  management_group_id     = data.azurerm_management_group.security.id
+  count = var.settings.security_management_group_policies.enabled ? 1 : 0
+  management_group_id     = var.settings.security_management_group_policies.create ? azurerm_management_group.security[0].id : data.azurerm_management_group.security[0].id
   merge_effects           = false
 
   # Populate member_definitions with a for loop (explicit)
@@ -47,7 +48,8 @@ module "mod_platforms_security_configure_network_configuration_initiative" {
   initiative_display_name = "Network Governance for Security"
   initiative_description  = "This policy set configures all the Azure Network settings and guardrails, such as Network Security Groups, Azure Firewall, and DDoS Protection"
   initiative_category     = "Network"
-  management_group_id     = data.azurerm_management_group.security.id
+  count = var.settings.security_management_group_policies.enabled ? 1 : 0
+  management_group_id     = var.settings.security_management_group_policies.create ? azurerm_management_group.security[0].id : data.azurerm_management_group.security[0].id
   merge_effects           = false
 
   # Populate member_definitions with a for loop (explicit)

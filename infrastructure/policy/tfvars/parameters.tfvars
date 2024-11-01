@@ -203,3 +203,26 @@ listOfAllowedIPAddresses = []
 #########################################
 
 budget_amount = "10000" # The budget amount
+
+
+
+settings = {
+  sandbox_management_group_policies = {
+    name = "sandbox"
+  }
+  platforms_management_group_policies = {
+    name = "platforms"
+  }
+  devsecops_management_group_policies = {
+    enabled = true
+  }
+  forensic_management_group_policies = {
+    enabled = true
+  }
+  identity_management_group_policies = {
+    name = "identity"
+  }
+  security_management_group_policies = {
+    enabled = true
+  }
+}

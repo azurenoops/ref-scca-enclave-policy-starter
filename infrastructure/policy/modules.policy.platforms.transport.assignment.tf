@@ -16,8 +16,9 @@ AUTHOR/S: jspinella
 module "mod_platforms_transport_configure_network_configuration_initiative_assignment" {
   source              = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
   version             = "~> 2.0"
-  initiative          = module.mod_platforms_transport_configure_network_configuration_initiative.initiative
-  assignment_scope    = data.azurerm_management_group.transport.id
+  initiative          = module.mod_platforms_transport_configure_network_configuration_initiative[0].initiative
+  count = var.settings.transport_management_group_policies.enabled ? 1 : 0
+  assignment_scope    = var.settings.transport_management_group_policies.create ? azurerm_management_group.transport[0].id : data.azurerm_management_group.transport[0].id
   assignment_location = var.default_location
 
   # resource remediation options
@@ -37,10 +38,10 @@ module "mod_platforms_transport_configure_network_configuration_initiative_assig
     allowedRanges       = var.listOfAllowedIPAddressesforNSGs,                         #  IP ranges to be allowed
     vnetRegion          = var.default_location,                                        #  Region of the VNET
     nsgRegion           = var.default_location,                                        #  Region of the NSG
-    storageId           = data.azurerm_storage_account.anoa_hub_storage.id,            #  Storage Account ID
-    workspaceResourceId = data.azurerm_log_analytics_workspace.anoa_laws.id,           #  Log Analytics Workspace ID
+    storageId           = var.settings.workspace.create ? azurerm_storage_account.anoa_hub_storage[0].id : data.azurerm_storage_account.anoa_hub_storage[0].id,            #  Storage Account ID
+    workspaceResourceId = var.settings.workspace.create ? azurerm_log_analytics_workspace.anoa_laws[0].id : data.azurerm_log_analytics_workspace.anoa_laws[0].id,           #  Log Analytics Workspace ID
     workspaceRegion     = var.default_location,                                        #  Region of the Log Analytics Workspace
-    workspaceId         = data.azurerm_log_analytics_workspace.anoa_laws.workspace_id, #  Log Analytics Workspace ID
+    workspaceId         = var.settings.workspace.create ? azurerm_log_analytics_workspace.anoa_laws[0].workspace_id : data.azurerm_log_analytics_workspace.anoa_laws[0].workspace_id, #  Log Analytics Workspace ID
     networkWatcherRG    = "NetworkWatcherRG",                                          #  Network Watcher Resource Group
     networkWatcherName  = "NetworkWatcher_${var.default_location}",                    #  Network Watcher Name
   }
@@ -64,8 +65,10 @@ module "mod_platforms_transport_configure_network_configuration_initiative_assig
 module "mod_platforms_transport_deploy_azure_monitor_baseline_transport_initiative_assignment" {
   source              = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
   version             = "~> 2.0"
-  initiative          = module.mod_platforms_transport_deploy_azure_monitor_baseline_transport_initiative.initiative
-  assignment_scope    = data.azurerm_management_group.transport.id
+  initiative          = module.mod_platforms_transport_deploy_azure_monitor_baseline_transport_initiative[0].initiative
+  count = var.settings.transport_management_group_policies.enabled ? 1 : 0
+  assignment_scope    = var.settings.transport_management_group_policies.create ? azurerm_management_group.transport[0].id : data.azurerm_management_group.transport[0].id
+  
   assignment_location = var.default_location
 
   # resource remediation options
@@ -98,8 +101,10 @@ module "mod_platforms_transport_deploy_azure_monitor_baseline_transport_initiati
 module "mod_platforms_transport_logging_transport_initiative_assignment" {
   source              = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
   version             = "~> 2.0"
-  initiative          = module.mod_platforms_transport_logging_transport_initiative.initiative
-  assignment_scope    = data.azurerm_management_group.transport.id
+  initiative          = module.mod_platforms_transport_logging_transport_initiative[0].initiative
+  count = var.settings.transport_management_group_policies.enabled ? 1 : 0
+  assignment_scope    = var.settings.transport_management_group_policies.create ? azurerm_management_group.transport[0].id : data.azurerm_management_group.transport[0].id
+  
   assignment_location = var.default_location
 
   # resource remediation options
@@ -115,7 +120,7 @@ module "mod_platforms_transport_logging_transport_initiative_assignment" {
 
   # assignment parameters
   assignment_parameters = {
-    logAnalytics           = data.azurerm_log_analytics_workspace.anoa_laws.id, #  Log Analytics Workspace ID
+    logAnalytics           = var.settings.workspace.create ? azurerm_log_analytics_workspace.anoa_laws[0].id : data.azurerm_log_analytics_workspace.anoa_laws[0].id, #  Log Analytics Workspace ID
     workspaceRetentionDays = var.workspaceRetentionDays,                        #  Retention Days for Log Analytics Workspace
   }
   # 
@@ -137,8 +142,10 @@ module "mod_platforms_transport_logging_transport_initiative_assignment" {
 module "mod_platforms_transport_deploy_azure_virtual_machine_baseline_transport_initiative_assignment" {
   source              = "azurenoops/overlays-policy/azurerm//modules/policySetAssignment/managementGroup"
   version             = "~> 2.0"
-  initiative          = module.mod_platforms_transport_configure_virtual_machine_configuration_initiative.initiative
-  assignment_scope    = data.azurerm_management_group.transport.id
+  initiative          = module.mod_platforms_transport_configure_virtual_machine_configuration_initiative[0].initiative
+  count = var.settings.transport_management_group_policies.enabled ? 1 : 0
+  assignment_scope    = var.settings.transport_management_group_policies.create ? azurerm_management_group.transport[0].id : data.azurerm_management_group.transport[0].id
+  
   assignment_location = var.default_location
 
   # resource remediation options
@@ -154,7 +161,7 @@ module "mod_platforms_transport_deploy_azure_virtual_machine_baseline_transport_
 
   # assignment parameters
   assignment_parameters = {
-    logAnalyticsWorkspaceId = data.azurerm_log_analytics_workspace.anoa_laws.id, #  Log Analytics Workspace ID
+    logAnalyticsWorkspaceId = var.settings.workspace.create ? azurerm_log_analytics_workspace.anoa_laws[0].id : data.azurerm_log_analytics_workspace.anoa_laws[0].id, #  Log Analytics Workspace ID
   }
 
   # 

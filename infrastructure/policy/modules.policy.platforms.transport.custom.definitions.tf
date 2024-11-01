@@ -23,7 +23,9 @@ module "mod_transport_deploy_provision_law_agent_custom_workspace_policy_definit
   display_name           = "Deploy and provision Log Analytics agent with custom workspace"
   policy_def_description = "This policy enables Security Center's auto provisioning of the Log Analytics agent on your subscriptions with custom workspace."
   policy_category        = "Security"
-  management_group_id    = data.azurerm_management_group.transport.id
+  count = var.settings.transport_management_group_policies.enabled ? 1 : 0
+  management_group_id     = var.settings.transport_management_group_policies.create ? azurerm_management_group.transport[0].id : data.azurerm_management_group.transport[0].id
+  
 }
 
 module "mod_transport_audit_log_analytics_workspace_retention_policy_definition" {
@@ -33,5 +35,7 @@ module "mod_transport_audit_log_analytics_workspace_retention_policy_definition"
   display_name           = "Audit Log Analytics Workspace Retention"
   policy_def_description = "This policy ensures that Log Analytics workspaces has a retention period."
   policy_category        = "Monitoring"
-  management_group_id    = data.azurerm_management_group.transport.id
+  count = var.settings.transport_management_group_policies.enabled ? 1 : 0
+  management_group_id     = var.settings.transport_management_group_policies.create ? azurerm_management_group.transport[0].id : data.azurerm_management_group.transport[0].id
+  
 }

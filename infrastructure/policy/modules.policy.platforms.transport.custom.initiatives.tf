@@ -22,7 +22,8 @@ module "mod_platforms_transport_deploy_azure_monitor_baseline_transport_initiati
   initiative_display_name = "Azure Monitor Baseline Alerts for Service Health for Transport"
   initiative_description  = "This policy set configures all the Azure Monitor Baseline Alerts for Service Health."
   initiative_category     = "Monitoring"
-  management_group_id     = data.azurerm_management_group.transport.id
+  count = var.settings.transport_management_group_policies.enabled ? 1 : 0
+  management_group_id     = var.settings.transport_management_group_policies.create ? azurerm_management_group.transport[0].id : data.azurerm_management_group.transport[0].id
   merge_effects           = false
 
   # Populate member_definitions with a for loop (explicit)
@@ -47,13 +48,14 @@ module "mod_platforms_transport_logging_transport_initiative" {
   initiative_display_name = "Logging Governance for Operations"
   initiative_description  = "This policy set configures all the Azure Logging settings and guardrails, such as Log Analytics workspace retention and Law Agent and Custom Workspace"
   initiative_category     = "Monitoring"
-  management_group_id     = data.azurerm_management_group.transport.id
+  count = var.settings.transport_management_group_policies.enabled ? 1 : 0
+  management_group_id     = var.settings.transport_management_group_policies.create ? azurerm_management_group.transport[0].id : data.azurerm_management_group.transport[0].id
   merge_effects           = false
 
   # Populate member_definitions with a for loop (explicit)
   member_definitions = [
-    module.mod_transport_deploy_provision_law_agent_custom_workspace_policy_definition.definition,   # Deploy Law Agent and Custom Workspace
-    module.mod_transport_audit_log_analytics_workspace_retention_policy_definition.definition,           # Audit Log Analytics Workspace Retention
+    module.mod_transport_deploy_provision_law_agent_custom_workspace_policy_definition[0].definition,   # Deploy Law Agent and Custom Workspace
+    module.mod_transport_audit_log_analytics_workspace_retention_policy_definition[0].definition,           # Audit Log Analytics Workspace Retention
     data.azurerm_policy_definition.deploy_configure_azure_log_analytics_workspaces_to_disable_public_network_access_for_log_ingestion_and_querying, # Deploy Configure Azure Log Analytics Workspaces to Disable Public Network Access for Log Ingestion and Querying
     data.azurerm_policy_definition.deploy_logging_by_category_group_for_Log_Analytics_workspaces,                                                   # Deploy Logging by Category Group for Log Analytics workspaces
   ]
@@ -71,7 +73,8 @@ module "mod_platforms_transport_configure_network_configuration_initiative" {
   initiative_display_name = "Network Governance for Transport"
   initiative_description  = "This policy set configures all the Azure Network settings and guardrails, such as Network Security Groups, Azure Firewall, and DDoS Protection"
   initiative_category     = "Network"
-  management_group_id     = data.azurerm_management_group.transport.id
+  count = var.settings.transport_management_group_policies.enabled ? 1 : 0
+  management_group_id     = var.settings.transport_management_group_policies.create ? azurerm_management_group.transport[0].id : data.azurerm_management_group.transport[0].id
   merge_effects           = false
 
   # Populate member_definitions with a for loop (explicit)
@@ -104,7 +107,8 @@ module "mod_platforms_transport_configure_virtual_machine_configuration_initiati
   initiative_display_name = "Virtual Machine Governance for DevSecOps"
   initiative_description  = "This policy set configures all the Virtual Machine settings and guardrails, such as VM Extensions, VM Diagnostics, and VM Encryption"
   initiative_category     = "Virtual Machines"
-  management_group_id     = data.azurerm_management_group.transport.id
+  count = var.settings.transport_management_group_policies.enabled ? 1 : 0
+  management_group_id     = var.settings.transport_management_group_policies.create ? azurerm_management_group.transport[0].id : data.azurerm_management_group.transport[0].id
   merge_effects           = false
 
   # Populate member_definitions with a for loop (explicit)

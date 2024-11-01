@@ -28,5 +28,5 @@ module "mod_platforms_network_configurations_policy_definition" {
   ])
   policy_def_name     = each.value
   policy_category     = "Network"
-  management_group_id = data.azurerm_management_group.platforms.id
+  management_group_id = var.settings.platforms_management_group_policies.create ? azurerm_management_group.platforms[0].id : data.azurerm_management_group.platforms[0].id
 }

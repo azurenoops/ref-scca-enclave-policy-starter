@@ -18,11 +18,12 @@ AUTHOR/S: jspinella
 module "mod_platforms_devsecops_deploy_azure_monitor_baseline_initiative" {
   source                  = "azurenoops/overlays-policy/azurerm//modules/policyInitiative"
   version                 = "~> 2.0"
+  count = var.settings.devsecops_management_group_policies.enabled ? 1 : 0
   initiative_name         = "deploy_monitoring_config"
   initiative_display_name = "Azure Monitor Baseline Alerts for Service Health for DevSecOps"
   initiative_description  = "This policy set configures all the Azure Monitor Baseline Alerts for Service Health."
   initiative_category     = "Monitoring"
-  management_group_id     = data.azurerm_management_group.devsecops.id
+  management_group_id     = var.settings.devsecops_management_group_policies.create ? azurerm_management_group.devsecops[0].id : data.azurerm_management_group.devsecops[0].id
   merge_effects           = false
 
   # Populate member_definitions with a for loop (explicit)
@@ -43,11 +44,12 @@ module "mod_platforms_devsecops_deploy_azure_monitor_baseline_initiative" {
 module "mod_platforms_devsecops_configure_network_configuration_initiative" {
   source                  = "azurenoops/overlays-policy/azurerm//modules/policyInitiative"
   version                 = "~> 2.0"
+  count = var.settings.devsecops_management_group_policies.enabled ? 1 : 0
   initiative_name         = "deploy_network_config"
   initiative_display_name = "Network Governance for DevSecOps"
   initiative_description  = "This policy set configures all the Azure Network settings and guardrails, such as Network Security Groups, Azure Firewall, and DDoS Protection"
   initiative_category     = "Network"
-  management_group_id     = data.azurerm_management_group.devsecops.id
+  management_group_id     = var.settings.devsecops_management_group_policies.create ? azurerm_management_group.devsecops[0].id : data.azurerm_management_group.devsecops[0].id
   merge_effects           = false
 
   # Populate member_definitions with a for loop (explicit)
@@ -76,11 +78,12 @@ module "mod_platforms_devsecops_configure_network_configuration_initiative" {
 module "mod_platforms_devsecops_configure_virtual_machine_configuration_initiative" {
   source                  = "azurenoops/overlays-policy/azurerm//modules/policyInitiative"
   version                 = "~> 2.0"
+  count = var.settings.devsecops_management_group_policies.enabled ? 1 : 0
   initiative_name         = "deploy_virtual_machine_config"
   initiative_display_name = "Virtual Machine Governance for DevSecOps"
   initiative_description  = "This policy set configures all the Virtual Machine settings and guardrails, such as VM Extensions, VM Diagnostics, and VM Encryption"
   initiative_category     = "Virtual Machines"
-  management_group_id     = data.azurerm_management_group.devsecops.id
+  management_group_id     = var.settings.devsecops_management_group_policies.create ? azurerm_management_group.devsecops[0].id : data.azurerm_management_group.devsecops[0].id
   merge_effects           = false
 
   # Populate member_definitions with a for loop (explicit)
